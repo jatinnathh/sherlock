@@ -1,0 +1,101 @@
+/* ── Confidence Timeline ────────────────────────────────────────── */
+
+.timeline-card {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.timeline-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 0.8rem;
+}
+
+.timeline-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.timeline-header-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.timeline-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-size: 0.75rem;
+  animation: slideIn 0.3s ease-out both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.timeline-col {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.time-col {
+  width: 55px;
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.7rem;
+}
+
+.conf-col {
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.conf-value {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.conf-delta {
+  font-size: 0.6rem;
+  font-weight: 500;
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+}
+
+.conf-delta.up {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.conf-delta.down {
+  color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.reason-col {
+  flex: 1;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

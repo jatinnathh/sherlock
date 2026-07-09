@@ -1,0 +1,120 @@
+.signals-glow {
+  height: 100%;
+}
+
+.signals-card {
+  height: 100%;
+}
+
+.signals-for {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 500;
+}
+
+.signals-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.20);
+  font-size: 0.85rem;
+}
+
+.signals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.signal-chip {
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  animation: fadeSlideIn 0.3s ease-out;
+}
+
+.signal-chip.fired {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.signal-chip.pending {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px dashed rgba(255, 255, 255, 0.06);
+  opacity: 0.5;
+}
+
+.signal-chip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.signal-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.signal-score {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.signal-score.high { color: #ffffff; }
+.signal-score.medium { color: rgba(255, 255, 255, 0.6); }
+.signal-score.low { color: rgba(255, 255, 255, 0.30); }
+.signal-score.pending-score { color: rgba(255, 255, 255, 0.15); }
+
+.signal-bar-track {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.35rem;
+}
+
+.signal-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.signal-bar-fill.high {
+  background: linear-gradient(90deg, #ffffff, #bbbbbb);
+}
+
+.signal-bar-fill.medium {
+  background: linear-gradient(90deg, rgba(255,255,255,0.5), rgba(255,255,255,0.3));
+}
+
+.signal-bar-fill.low {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.signal-desc {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.30);
+  line-height: 1.4;
+  margin: 0;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

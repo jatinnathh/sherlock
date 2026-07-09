@@ -1,0 +1,27 @@
+{
+  "meetingId": "meet-abc-123",
+  "platform": "google-meet",
+  "scheduledStart": "2026-07-09T10:00:00Z",
+  "events": [
+    { "time": 0,  "type": "join",          "participantId": "2", "data": { "displayName": "Rahul (Interviewer)" } },
+    { "time": 0,  "type": "join",          "participantId": "1", "data": { "displayName": "MacBook Pro" } },
+    { "time": 2,  "type": "join",          "participantId": "3", "data": { "displayName": "Observer_01" } },
+    { "time": 3,  "type": "webcam_on",     "participantId": "2", "data": {} },
+    { "time": 3,  "type": "webcam_on",     "participantId": "1", "data": {} },
+    { "time": 5,  "type": "speaking",      "participantId": "2", "data": { "durationMs": 3000 } },
+    { "time": 8,  "type": "name_change",   "participantId": "1", "data": { "oldName": "MacBook Pro", "newName": "John" } },
+    { "time": 10, "type": "speaking",      "participantId": "1", "data": { "durationMs": 4000 } },
+    { "time": 15, "type": "webcam_off",    "participantId": "3", "data": {} },
+    { "time": 20, "type": "speaking",      "participantId": "2", "data": { "durationMs": 5000 } },
+    { "time": 25, "type": "speaking",      "participantId": "2", "data": { "durationMs": 4000 } },
+    { "time": 30, "type": "speaking",      "participantId": "1", "data": { "durationMs": 6000 } },
+    { "time": 38, "type": "speaking",      "participantId": "1", "data": { "durationMs": 8000 } },
+    { "time": 48, "type": "speaking",      "participantId": "2", "data": { "durationMs": 3000 } },
+    { "time": 53, "type": "speaking",      "participantId": "1", "data": { "durationMs": 10000 } },
+    { "time": 65, "type": "screen_share",  "participantId": "1", "data": { "active": true } },
+    { "time": 70, "type": "speaking",      "participantId": "1", "data": { "durationMs": 5000 } },
+    { "time": 78, "type": "speaking",      "participantId": "2", "data": { "durationMs": 4000 } },
+    { "time": 85, "type": "screen_share",  "participantId": "1", "data": { "active": false } },
+    { "time": 90, "type": "speaking",      "participantId": "1", "data": { "durationMs": 7000 } }
+  ]
+}

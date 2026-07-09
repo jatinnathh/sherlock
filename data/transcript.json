@@ -1,0 +1,13 @@
+[
+  { "time": 5,  "speaker": "2", "text": "Hi everyone, thanks for joining. Let me just confirm — are we all set?" },
+  { "time": 10, "speaker": "1", "text": "Hello, I am John. Yes, I can hear you well." },
+  { "time": 20, "speaker": "2", "text": "Great. So John, let's get started. Tell me a bit about yourself and your background." },
+  { "time": 25, "speaker": "2", "text": "Specifically, what drew you to this role?" },
+  { "time": 30, "speaker": "1", "text": "Sure. I've been working as a full-stack engineer for the past four years, primarily with TypeScript and Python." },
+  { "time": 38, "speaker": "1", "text": "Most recently I built a real-time analytics platform that processes about two million events per day using Kafka and ClickHouse." },
+  { "time": 48, "speaker": "2", "text": "That's interesting. Can you walk me through the architecture of that system?" },
+  { "time": 53, "speaker": "1", "text": "Absolutely. We had a microservices setup with an event ingestion layer, a stream processing pipeline, and a serving layer for the dashboards. Let me share my screen to show a diagram." },
+  { "time": 70, "speaker": "1", "text": "So here you can see the ingestion service on the left, then Kafka in the middle, and ClickHouse on the right for OLAP queries." },
+  { "time": 78, "speaker": "2", "text": "Nice. How did you handle backpressure when the event volume spiked?" },
+  { "time": 90, "speaker": "1", "text": "We implemented adaptive batching with exponential backoff. During peak loads, we'd buffer events in a Redis queue and drain them asynchronously." }
+]

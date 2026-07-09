@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1",
+    "displayName": "MacBook Pro",
+    "email": null,
+    "role": "unknown",
+    "joinTime": 0,
+    "leaveTime": null,
+    "webcamOn": true,
+    "screenShare": false,
+    "nameChanges": [
+      { "time": 8, "newName": "John" }
+    ]
+  },
+  {
+    "id": "2",
+    "displayName": "Rahul (Interviewer)",
+    "email": "rahul@company.com",
+    "role": "unknown",
+    "joinTime": 0,
+    "leaveTime": null,
+    "webcamOn": true,
+    "screenShare": false,
+    "nameChanges": []
+  },
+  {
+    "id": "3",
+    "displayName": "Observer_01",
+    "email": "observer@company.com",
+    "role": "unknown",
+    "joinTime": 2,
+    "leaveTime": null,
+    "webcamOn": false,
+    "screenShare": false,
+    "nameChanges": []
+  }
+]

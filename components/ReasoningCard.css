@@ -1,0 +1,189 @@
+.reasoning-glow {
+  height: 100%;
+}
+
+.reasoning-card {
+  height: 100%;
+}
+
+.reasoning-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.20);
+  font-size: 0.85rem;
+}
+
+.reasoning-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.reasoning-verdict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+}
+
+.verdict-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.verdict-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e5e5e5;
+}
+
+.verdict-confidence {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-geist-mono), monospace;
+  padding: 0.15rem 0.5rem;
+  border-radius: 8px;
+}
+
+.verdict-confidence.high {
+  background: rgba(255, 255, 255, 0.10);
+  color: #ffffff;
+}
+
+.verdict-confidence.medium {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.verdict-confidence.low {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.reasoning-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.reasoning-line {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.5;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.reasoning-line:last-child {
+  border-bottom: none;
+}
+
+.reasoning-others {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.others-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.30);
+  width: 100%;
+  margin-bottom: 0.1rem;
+}
+
+.others-chip {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── LLM Section ───────────────────────────────────────────── */
+
+.llm-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.llm-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.llm-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+}
+
+.llm-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+.llm-loading {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+.llm-verdict {
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0;
+}
+
+.llm-signals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.llm-signal-line {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.llm-signal-dot {
+  color: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+  font-weight: 700;
+}
