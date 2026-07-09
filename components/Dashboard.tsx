@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useSimulation } from '@/hooks/useSimulation';
 import { useLLMReasoning } from '@/hooks/useLLMReasoning';
 import { useAudio } from '@/hooks/useAudio';
@@ -19,6 +21,8 @@ export default function Dashboard() {
   const [customScenario, setCustomScenario] = useState<GeneratedScenario | null>(null);
   const [dismissedReportKey, setDismissedReportKey] = useState<string | null>(null);
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
+  const [isInitializing, setIsInitializing] = useState(false);
+  const initializationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   // Track notified runs so we don't spam the email API
   const notifiedRunsRef = useRef<Set<string>>(new Set());
@@ -43,6 +47,13 @@ export default function Dashboard() {
   // Track last processed event index for audio
   const lastAudioIdx = useRef(0);
 
+  const clearInitializationTimer = () => {
+    if (initializationTimerRef.current) {
+      clearTimeout(initializationTimerRef.current);
+      initializationTimerRef.current = null;
+    }
+  };
+
   // Speak new transcript events as they arrive
   useEffect(() => {
     if (!audioEnabled) return;
@@ -59,7 +70,13 @@ export default function Dashboard() {
   useEffect(() => {
     stop();
     lastAudioIdx.current = 0;
+    clearInitializationTimer();
+    setIsInitializing(false);
   }, [scenarioId, customScenario, stop]);
+
+  useEffect(() => {
+    return () => clearInitializationTimer();
+  }, []);
 
   const handleGenerate = (data: GeneratedScenario) => {
     setCustomScenario(data);
@@ -73,6 +90,44 @@ export default function Dashboard() {
     state && state.totalDuration > 0 && state.currentTime >= state.totalDuration + 1 && !isSpeaking,
   );
   const showReport = simulationComplete && dismissedReportKey !== scenarioRunKey;
+
+  const activeSpeakerId = useMemo(() => {
+    if (!state) return null;
+    const now = state.currentTime;
+    const activeSpeakingEvent = [...events]
+      .reverse()
+      .find((event) => {
+        if (event.type !== 'speaking') return false;
+        const durationSeconds = (event.data.durationMs ?? 2500) / 1000;
+        return now >= event.time && now <= event.time + Math.max(durationSeconds, 1.5);
+      });
+
+    if (activeSpeakingEvent) return activeSpeakingEvent.participantId;
+
+    const recentTranscriptEvent = [...events]
+      .reverse()
+      .find((event) => event.type === 'transcript' && now >= event.time && now <= event.time + 3.5);
+
+    return recentTranscriptEvent?.participantId ?? null;
+  }, [events, state]);
+
+  const handleStart = () => {
+    if (isInitializing || state?.isRunning) return;
+    setIsInitializing(true);
+    clearInitializationTimer();
+    initializationTimerRef.current = setTimeout(() => {
+      setIsInitializing(false);
+      start();
+      initializationTimerRef.current = null;
+    }, 1600);
+  };
+
+  const handlePause = () => {
+    clearInitializationTimer();
+    setIsInitializing(false);
+    pause();
+    stop();
+  };
 
   // Send email notification when simulation completes
   useEffect(() => {
@@ -121,10 +176,16 @@ export default function Dashboard() {
           speed={speed}
           scenario={scenarioId}
           audioEnabled={audioEnabled}
-          onStart={start}
-          onPause={() => { pause(); stop(); }}
+          isInitializing={isInitializing}
+          onStart={handleStart}
+          onPause={handlePause}
           onSpeedChange={setSpeed}
-          onScenarioChange={(id) => { stop(); setScenarioId(id); }}
+          onScenarioChange={(id) => {
+            clearInitializationTimer();
+            setIsInitializing(false);
+            stop();
+            setScenarioId(id);
+          }}
           onAudioToggle={toggleAudio}
           onSeek={(time) => { stop(); seekTo(time); }}
         />
@@ -134,6 +195,7 @@ export default function Dashboard() {
         <ParticipantsCard
           scores={scores}
           participants={state?.participants ?? {}}
+          activeSpeakerId={activeSpeakerId}
           onUpdateParticipant={scenarioId === 'custom' ? updateParticipant : undefined}
         />
       </div>
@@ -175,6 +237,23 @@ export default function Dashboard() {
           llmResult={llmResult}
           onClose={() => setDismissedReportKey(scenarioRunKey)}
         />
+      )}
+
+      {isInitializing && (
+        <div className="data-sync-overlay" aria-live="polite">
+          <div className="data-sync-panel">
+            <div className="sync-orbit">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="sync-copy">
+              <span>Connecting to WebRTC streams...</span>
+              <span>Initializing AI fraud models...</span>
+              <span>Calibrating participant identity signals...</span>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

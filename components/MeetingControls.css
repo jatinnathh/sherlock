@@ -71,6 +71,15 @@
   border-color: rgba(255, 255, 255, 0.05);
 }
 
+.control-spinner {
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  border-top-color: #ffffff;
+  animation: controlSpin 0.85s linear infinite;
+}
+
 .speed-selector {
   display: flex;
   gap: 0.25rem;
@@ -287,4 +296,10 @@
 
 .audio-toggle.off {
   color: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes controlSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }

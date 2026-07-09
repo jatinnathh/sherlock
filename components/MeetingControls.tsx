@@ -11,6 +11,7 @@ interface MeetingControlsProps {
   speed: number;
   scenario: string;
   audioEnabled: boolean;
+  isInitializing: boolean;
   onStart: () => void;
   onPause: () => void;
   onSpeedChange: (speed: number) => void;
@@ -30,6 +31,7 @@ export default function MeetingControls({
   speed,
   scenario,
   audioEnabled,
+  isInitializing,
   onStart,
   onPause,
   onSpeedChange,
@@ -116,10 +118,12 @@ export default function MeetingControls({
           <button
             className={`control-btn ${totalDuration === 0 ? 'disabled' : ''}`}
             onClick={state?.isRunning ? onPause : onStart}
-            disabled={totalDuration === 0}
+            disabled={totalDuration === 0 || isInitializing}
             title={totalDuration === 0 ? "Generate a custom scenario first" : ""}
           >
-            {state?.isRunning ? (
+            {isInitializing ? (
+              <span className="control-spinner" />
+            ) : state?.isRunning ? (
               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                 <rect x="3" y="2" width="4" height="12" rx="1" />
                 <rect x="9" y="2" width="4" height="12" rx="1" />
@@ -129,7 +133,7 @@ export default function MeetingControls({
                 <path d="M4 2.5v11l9-5.5L4 2.5z" />
               </svg>
             )}
-            <span>{state?.isRunning ? 'Pause' : 'Play'}</span>
+            <span>{isInitializing ? 'Syncing' : state?.isRunning ? 'Pause' : 'Play'}</span>
           </button>
 
           <div className="speed-selector">

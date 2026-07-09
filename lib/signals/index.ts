@@ -10,6 +10,7 @@ export { scoreEmail } from './email';
 export { scoreTranscript } from './transcript';
 export { scoreSpeaker } from './speaker';
 export { scoreJoin } from './join';
+export { scoreScreenShare } from './screenshare';
 export { scoreCamera } from './camera';
 export { scoreAudio } from './audio';
 

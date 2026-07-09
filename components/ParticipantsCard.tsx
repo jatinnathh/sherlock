@@ -9,6 +9,7 @@ import './ParticipantsCard.css';
 interface ParticipantsCardProps {
   scores: ParticipantScore[];
   participants: Record<string, Participant>;
+  activeSpeakerId?: string | null;
   onUpdateParticipant?: (id: string, updates: Partial<Participant>) => void;
 }
 
@@ -27,7 +28,12 @@ function AnimatedConfidence({ value, className }: { value: number; className: st
   );
 }
 
-export default function ParticipantsCard({ scores, participants, onUpdateParticipant }: ParticipantsCardProps) {
+export default function ParticipantsCard({
+  scores,
+  participants,
+  activeSpeakerId,
+  onUpdateParticipant,
+}: ParticipantsCardProps) {
   const sorted = [...scores].sort((a, b) => b.confidence - a.confidence);
 
   return (
@@ -72,7 +78,7 @@ export default function ParticipantsCard({ scores, participants, onUpdatePartici
                 >
                   <div className="participant-header">
                     <div className="participant-info">
-                      <div className="participant-avatar">
+                      <div className={`participant-avatar ${activeSpeakerId === p.id ? 'speaking' : ''}`}>
                         <div className={`avatar-circle ${p.webcamOn ? 'active' : 'inactive'}`}>
                           {p.displayName.charAt(0).toUpperCase()}
                         </div>

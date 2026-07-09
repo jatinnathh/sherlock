@@ -11,6 +11,7 @@ The demo simulates Google Meet style participant events, speaker-attributed tran
 - Combines weak signals instead of relying on one brittle rule.
 - Handles bad or missing display names such as `MacBook Pro` or `Participant_47291`.
 - Uses transcript behavior to distinguish candidates from interviewers and observers.
+- Highlights the active speaker with a live meeting-style avatar ring.
 - Shows when the system is still collecting evidence instead of pretending to be certain.
 - Optionally uses a Groq-hosted LLM for an additional reasoning pass.
 - Includes an AI scenario generator for custom edge-case simulations.
@@ -30,7 +31,8 @@ flowchart LR
   F --> F3["Transcript Analysis"]
   F --> F4["Speaking Pattern"]
   F --> F5["Join Timing"]
-  F --> F6["Camera and Screen Share"]
+  F --> F6["Screen Share Pattern"]
+  F --> F7["Camera Activity"]
 
   F1 --> G["Weighted Confidence Engine"]
   F2 --> G
@@ -38,6 +40,7 @@ flowchart LR
   F4 --> G
   F5 --> G
   F6 --> G
+  F7 --> G
 
   G --> H["Decision Status"]
   H --> I["Live Dashboard"]
@@ -54,12 +57,13 @@ The core scorer lives in `lib/confidence.ts`. Each participant receives six sign
 
 | Signal | Weight | Why it matters |
 | --- | ---: | --- |
-| Name match | 30% | Strong when reliable, but often missing or wrong |
+| Name match | 28% | Strong when reliable, but often missing or wrong |
 | Transcript analysis | 22% | Candidates answer questions and describe experience |
-| Speaking pattern | 18% | Candidates usually speak more than observers/interviewers |
-| Email match | 15% | Strong calendar signal when available |
-| Join timing | 10% | Useful weak signal, not decisive |
-| Camera activity | 5% | Helpful but weak alone |
+| Speaking pattern | 16% | Candidates usually speak more than observers/interviewers |
+| Email match | 14% | Strong calendar signal when available |
+| Join timing | 8% | Useful weak signal, not decisive |
+| Screen share pattern | 8% | Timing-aware signal for coding exercises, demos, or interviewer setup |
+| Camera activity | 4% | Helpful but weak alone |
 
 The current leader is marked as:
 
@@ -151,5 +155,5 @@ Current limitations:
 2. Show the architecture diagram and explain the weak-signal approach.
 3. Run the `MacBook Pro` scenario and show confidence increasing from transcript and behavior.
 4. Run `Two Johns` or `Observer Talks` to demonstrate ambiguity handling.
-5. Show the reasoning panel and confidence timeline.
+5. Show the active speaker ring, screen-share signal, reasoning panel, and confidence timeline.
 6. Close with limitations and next steps.

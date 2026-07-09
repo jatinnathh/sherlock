@@ -9,9 +9,35 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import type {
+  CalendarData,
+  MeetingData,
+  MeetingEvent,
+  Participant,
+  TranscriptLine,
+} from '@/lib/simulation';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL = 'llama-3.1-8b-instant';
+
+interface GenerateRequest {
+  candidateName: string;
+  candidateEmail: string;
+  displayStyle: string;
+  joinBehavior: string;
+  webcam: string;
+  observerBehavior: string;
+  specialCondition: string;
+  interviewerName: string;
+  customPrompt: string;
+}
+
+interface GeneratedScenarioPayload {
+  calendar: CalendarData;
+  participants: Participant[];
+  meeting: MeetingData;
+  transcript: TranscriptLine[];
+}
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.GROQ_KEY;
@@ -23,17 +49,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let body: {
-    candidateName: string;
-    candidateEmail: string;
-    displayStyle: string;
-    joinBehavior: string;
-    webcam: string;
-    observerBehavior: string;
-    specialCondition: string;
-    interviewerName: string;
-    customPrompt: string;
-  };
+  let body: GenerateRequest;
 
   try {
     body = await request.json();
@@ -166,7 +182,7 @@ Return JSON only. No markdown, no explanation.`;
       return NextResponse.json({ error: 'No content in Groq response' }, { status: 500 });
     }
 
-    const parsed = JSON.parse(content);
+    const parsed = normalizeGeneratedScenario(JSON.parse(content), body);
 
     // Validate and return
     return NextResponse.json({
@@ -181,4 +197,70 @@ Return JSON only. No markdown, no explanation.`;
       { status: 500 },
     );
   }
+}
+
+function normalizeGeneratedScenario(
+  scenario: GeneratedScenarioPayload,
+  request: GenerateRequest,
+): GeneratedScenarioPayload {
+  const candidate = scenario.participants.find((p) => p.id === '1') ?? scenario.participants[0];
+  const wantsCandidateScreenShare =
+    request.specialCondition.toLowerCase().includes('candidate shares screen') ||
+    request.customPrompt.toLowerCase().includes('candidate shares screen');
+
+  if (!candidate || !wantsCandidateScreenShare) {
+    return scenario;
+  }
+
+  const existingShare = scenario.meeting.events.some(
+    (event) => event.type === 'screen_share' && event.participantId === candidate.id,
+  );
+
+  const firstCandidateAnswer = scenario.transcript.find(
+    (line) => line.speaker === candidate.id && line.time >= candidate.joinTime,
+  );
+  const shareStart = Math.min(
+    105,
+    Math.max(candidate.joinTime + 6, (firstCandidateAnswer?.time ?? candidate.joinTime + 20) + 8),
+  );
+
+  const normalizedParticipants = scenario.participants.map((participant) =>
+    participant.id === candidate.id
+      ? { ...participant, screenShare: false }
+      : participant,
+  );
+
+  if (existingShare) {
+    return {
+      ...scenario,
+      participants: normalizedParticipants,
+    };
+  }
+
+  const screenShareEvents: MeetingEvent[] = [
+    {
+      time: shareStart,
+      type: 'screen_share',
+      participantId: candidate.id,
+      data: { active: true },
+    },
+  ];
+
+  if (shareStart + 22 <= 118) {
+    screenShareEvents.push({
+      time: shareStart + 22,
+      type: 'screen_share',
+      participantId: candidate.id,
+      data: { active: false },
+    });
+  }
+
+  return {
+    ...scenario,
+    participants: normalizedParticipants,
+    meeting: {
+      ...scenario.meeting,
+      events: [...scenario.meeting.events, ...screenShareEvents].sort((a, b) => a.time - b.time),
+    },
+  };
 }

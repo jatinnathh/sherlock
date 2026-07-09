@@ -18,6 +18,7 @@ import { scoreTranscript } from './signals/transcript';
 import { scoreSpeaker } from './signals/speaker';
 import { scoreJoin } from './signals/join';
 import { scoreCamera } from './signals/camera';
+import { scoreScreenShare } from './signals/screenshare';
 import type { SignalResult } from './signals/name';
 
 // ─── Public Types ───────────────────────────────────────────────────
@@ -48,20 +49,22 @@ export interface ParticipantScore {
  * Weight configuration for each signal.
  * Weights sum to exactly 1.0 (100%) for direct normalisation.
  *
- *   Name        30%  — strongest single signal
- *   Transcript   22%  — what they say reveals identity
- *   Speaking     18%  — candidate talks 40-65% of the time
- *   Email        15%  — calendar email match
- *   Join         10%  — join order/timing
- *   Camera        5%  — webcam on/off is weak alone
+ *   Name         28% - strongest single signal
+ *   Transcript   22% - what they say reveals identity
+ *   Speaking     16% - candidate talks 40-65% of the time
+ *   Email        14% - calendar email match
+ *   Join          8% - join order/timing
+ *   Screen Share  8% - coding/demo workflow signal
+ *   Camera        4% - webcam on/off is weak alone
  */
 const SIGNAL_WEIGHTS: Record<string, number> = {
-  'name-match':          0.30,
-  'email-match':         0.15,
+  'name-match':          0.28,
+  'email-match':         0.14,
   'transcript-analysis': 0.22,
-  'speaker-pattern':     0.18,
-  'join-timing':         0.10,
-  'camera-activity':     0.05,
+  'speaker-pattern':     0.16,
+  'join-timing':         0.08,
+  'screen-share-pattern': 0.08,
+  'camera-activity':     0.04,
 };
 
 // ─── Signal Wiring ──────────────────────────────────────────────────
@@ -99,6 +102,11 @@ function extractSignals(
       id: 'join-timing',
       name: 'Join Timing',
       result: scoreJoin(participant, allParticipants),
+    },
+    {
+      id: 'screen-share-pattern',
+      name: 'Screen Share',
+      result: scoreScreenShare(participant, firedEvents),
     },
     {
       id: 'camera-activity',

@@ -40,11 +40,12 @@ export function useSimulation(
   const [scores, setScores] = useState<ParticipantScore[]>([]);
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [speed, setSpeedState] = useState(initialSpeed);
+  const speedRef = useRef(initialSpeed);
   const [history, setHistory] = useState<ConfidenceSnapshot[]>([]);
   const lastConfRef = useRef(0);
 
   useEffect(() => {
-    const engine = new SimulationEngine({ speed, tickIntervalMs: 200 });
+    const engine = new SimulationEngine({ speed: speedRef.current, tickIntervalMs: 200 });
     
     // Load data from either custom scenario or predefined scenario ID
     let meeting: MeetingData;
@@ -128,7 +129,7 @@ export function useSimulation(
     return () => {
       engine.pause();
     };
-  }, [scenarioId, customScenario]); // Removed speed to prevent engine recreate on speed change
+  }, [scenarioId, customScenario]);
 
   const start = useCallback(() => {
     engineRef.current?.start();
@@ -141,6 +142,7 @@ export function useSimulation(
   }, []);
 
   const setSpeed = useCallback((newSpeed: number) => {
+    speedRef.current = newSpeed;
     setSpeedState(newSpeed);
     engineRef.current?.setSpeed(newSpeed);
   }, []);

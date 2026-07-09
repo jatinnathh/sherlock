@@ -126,6 +126,97 @@
   animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.data-sync-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.08), transparent 32%),
+    rgba(0, 0, 0, 0.74);
+  backdrop-filter: blur(12px);
+  animation: fadeIn 0.18s ease-out;
+}
+
+.data-sync-panel {
+  width: min(420px, calc(100vw - 40px));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(10, 10, 10, 0.92);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+}
+
+.sync-orbit {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.sync-orbit::before {
+  content: "";
+  position: absolute;
+  inset: 23px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 22px rgba(255, 255, 255, 0.55);
+}
+
+.sync-orbit span {
+  position: absolute;
+  inset: 6px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.85);
+  animation: syncOrbit 1.2s linear infinite;
+}
+
+.sync-orbit span:nth-child(2) {
+  inset: 13px;
+  border-top-color: rgba(74, 222, 128, 0.78);
+  animation-duration: 0.9s;
+  animation-direction: reverse;
+}
+
+.sync-orbit span:nth-child(3) {
+  inset: -1px;
+  border-top-color: rgba(125, 211, 252, 0.55);
+  animation-duration: 1.6s;
+}
+
+.sync-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.54);
+}
+
+.sync-copy span:first-child {
+  color: #ffffff;
+  font-weight: 650;
+}
+
+.sync-copy span {
+  animation: syncLine 1.6s ease-in-out infinite;
+}
+
+.sync-copy span:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.sync-copy span:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -139,5 +230,20 @@
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes syncOrbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes syncLine {
+  0%, 100% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 1;
   }
 }

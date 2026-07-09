@@ -82,6 +82,40 @@
   gap: 0.65rem;
 }
 
+.participant-avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.participant-avatar::before,
+.participant-avatar::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.participant-avatar.speaking::before {
+  border: 1px solid rgba(74, 222, 128, 0.85);
+  box-shadow: 0 0 16px rgba(74, 222, 128, 0.45);
+  animation: activeSpeakerPulse 1.25s ease-out infinite;
+}
+
+.participant-avatar.speaking::after {
+  inset: 7px;
+  background: rgba(74, 222, 128, 0.12);
+  filter: blur(4px);
+  opacity: 1;
+  animation: activeSpeakerGlow 0.8s ease-in-out infinite alternate;
+}
+
 .avatar-circle {
   width: 32px;
   height: 32px;
@@ -92,6 +126,8 @@
   font-size: 0.8rem;
   font-weight: 700;
   flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .avatar-circle.active {
@@ -186,6 +222,19 @@
   padding: 0.1rem 0.45rem;
 }
 
+.badge-candidate.identified {
+  border-color: rgba(74, 222, 128, 0.45);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.12);
+}
+
+.badge-candidate.tentative {
+  border-color: rgba(250, 204, 21, 0.45);
+}
+
+.badge-candidate.insufficient_evidence {
+  color: rgba(255, 255, 255, 0.65);
+}
+
 .confidence-value {
   font-size: 1.1rem;
   font-weight: 700;
@@ -221,4 +270,30 @@
 
 .confidence-bar-fill.low {
   background: rgba(255, 255, 255, 0.10);
+}
+
+@keyframes activeSpeakerPulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.95;
+  }
+  70% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
+@keyframes activeSpeakerGlow {
+  from {
+    transform: scale(0.92);
+    opacity: 0.35;
+  }
+  to {
+    transform: scale(1.08);
+    opacity: 0.8;
+  }
 }
