@@ -87,7 +87,10 @@ export default function Dashboard() {
     ? `custom:${customScenario.meeting.meetingId}:${customScenario.meeting.events.length}:${customScenario.transcript.length}`
     : scenarioId;
   const simulationComplete = Boolean(
-    state && state.totalDuration > 0 && state.currentTime >= state.totalDuration + 1 && !isSpeaking,
+    state &&
+      state.totalDuration > 0 &&
+      state.currentTime >= state.totalDuration &&
+      (!state.isRunning || !isSpeaking),
   );
   const showReport = simulationComplete && dismissedReportKey !== scenarioRunKey;
 
@@ -235,6 +238,9 @@ export default function Dashboard() {
         <ReportCard
           scores={scores}
           llmResult={llmResult}
+          events={events}
+          participants={state?.participants ?? {}}
+          calendar={state?.calendar ?? null}
           onClose={() => setDismissedReportKey(scenarioRunKey)}
         />
       )}

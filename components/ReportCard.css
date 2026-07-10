@@ -15,7 +15,9 @@
 
 .report-modal {
   width: 100%;
-  max-width: 600px;
+  max-width: 920px;
+  max-height: 88vh;
+  overflow: hidden;
 }
 
 .report-glow {
@@ -27,6 +29,8 @@
   flex-direction: column;
   gap: 1.5rem;
   padding: 1.5rem;
+  max-height: 88vh;
+  overflow-y: auto;
 }
 
 .report-header {
@@ -90,6 +94,11 @@
   color: #ffffff;
 }
 
+.report-subtle {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.38);
+}
+
 .report-score-box {
   display: flex;
   flex-direction: column;
@@ -139,11 +148,13 @@
   padding: 0.75rem;
 }
 
-.report-signal-item {
+.report-signal-item,
+.report-signal-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.8rem;
+  gap: 1rem;
 }
 
 .report-signal-name {
@@ -154,6 +165,70 @@
   color: rgba(255, 255, 255, 0.4);
   font-family: 'JetBrains Mono', 'SF Mono', monospace;
   font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.report-signal-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.report-signal-detail.fired {
+  border-color: rgba(74, 222, 128, 0.18);
+}
+
+.report-signal-detail.pending {
+  opacity: 0.65;
+}
+
+.report-signal-reason {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.62);
+  line-height: 1.45;
+}
+
+.report-evidence-list,
+.report-transcript-list,
+.report-ranked-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.report-evidence-item,
+.report-transcript-line,
+.report-ranked-item {
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 7px;
+  padding: 0.45rem 0.55rem;
+}
+
+.report-transcript-line {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0.55rem;
+}
+
+.report-ranked-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.report-time {
+  color: rgba(74, 222, 128, 0.78);
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 0.72rem;
 }
 
 .report-llm-reasons {
