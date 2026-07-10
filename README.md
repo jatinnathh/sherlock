@@ -4,6 +4,9 @@ Sherlock is a real-time prototype for identifying the interview candidate during
 
 This project was built for the Sherlock internship challenge. It demonstrates candidate identification as a continuously updated confidence problem rather than a single name-matching rule.
 
+<img src="public/1.png" alt="Demo" width="700">
+<img src="public/2.png" alt="Demo" width="700">
+<img src="public/3.png" alt="Demo" width="700">
 ## Problem
 
 In live interviews, the candidate is not always obvious from meeting metadata.
