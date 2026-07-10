@@ -130,7 +130,6 @@ flowchart LR
 app/
   api/generate/route.ts   Groq-powered custom scenario generator
   api/llm/route.ts        Groq-powered reasoning endpoint
-  api/notify/route.ts     Optional email notification endpoint
   page.tsx                App entry point
 
 components/
