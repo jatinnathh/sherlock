@@ -23,6 +23,8 @@ export default function Dashboard() {
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const [isInitializing, setIsInitializing] = useState(false);
   const initializationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const seekSilenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isSeekingRef = useRef(false);
   
   // Track notified runs so we don't spam the email API
   const notifiedRunsRef = useRef<Set<string>>(new Set());
@@ -46,6 +48,7 @@ export default function Dashboard() {
 
   // Track last processed event index for audio
   const lastAudioIdx = useRef(0);
+  const eventCountRef = useRef(0);
 
   const clearInitializationTimer = () => {
     if (initializationTimerRef.current) {
@@ -54,9 +57,24 @@ export default function Dashboard() {
     }
   };
 
+  const clearSeekSilenceTimer = () => {
+    if (seekSilenceTimerRef.current) {
+      clearTimeout(seekSilenceTimerRef.current);
+      seekSilenceTimerRef.current = null;
+    }
+  };
+
   // Speak new transcript events as they arrive
   useEffect(() => {
-    if (!audioEnabled) return;
+    eventCountRef.current = events.length;
+    const atEnd = Boolean(state && state.totalDuration > 0 && state.currentTime >= state.totalDuration);
+
+    if (!audioEnabled || speed !== 1 || isSeekingRef.current || atEnd) {
+      if (atEnd) stop();
+      lastAudioIdx.current = events.length;
+      return;
+    }
+
     const newEvents = events.slice(lastAudioIdx.current);
     for (const ev of newEvents) {
       if (ev.type === 'transcript' && ev.data.text) {
@@ -64,18 +82,30 @@ export default function Dashboard() {
       }
     }
     lastAudioIdx.current = events.length;
-  }, [events, audioEnabled, speak]);
+  }, [events, audioEnabled, speed, state, speak, stop]);
+
+  useEffect(() => {
+    if (speed !== 1) {
+      stop();
+      lastAudioIdx.current = events.length;
+    }
+  }, [speed, events.length, stop]);
 
   // Stop audio when scenario changes
   useEffect(() => {
     stop();
     lastAudioIdx.current = 0;
     clearInitializationTimer();
+    clearSeekSilenceTimer();
+    isSeekingRef.current = false;
     setIsInitializing(false);
   }, [scenarioId, customScenario, stop]);
 
   useEffect(() => {
-    return () => clearInitializationTimer();
+    return () => {
+      clearInitializationTimer();
+      clearSeekSilenceTimer();
+    };
   }, []);
 
   const handleGenerate = (data: GeneratedScenario) => {
@@ -127,9 +157,23 @@ export default function Dashboard() {
 
   const handlePause = () => {
     clearInitializationTimer();
+    clearSeekSilenceTimer();
+    isSeekingRef.current = false;
     setIsInitializing(false);
     pause();
     stop();
+  };
+
+  const handleSeek = (time: number) => {
+    stop();
+    clearSeekSilenceTimer();
+    isSeekingRef.current = true;
+    seekTo(time);
+    seekSilenceTimerRef.current = setTimeout(() => {
+      lastAudioIdx.current = eventCountRef.current;
+      isSeekingRef.current = false;
+      seekSilenceTimerRef.current = null;
+    }, 250);
   };
 
   // Send email notification when simulation completes
@@ -185,12 +229,14 @@ export default function Dashboard() {
           onSpeedChange={setSpeed}
           onScenarioChange={(id) => {
             clearInitializationTimer();
+            clearSeekSilenceTimer();
+            isSeekingRef.current = false;
             setIsInitializing(false);
             stop();
             setScenarioId(id);
           }}
           onAudioToggle={toggleAudio}
-          onSeek={(time) => { stop(); seekTo(time); }}
+          onSeek={handleSeek}
         />
       </div>
 

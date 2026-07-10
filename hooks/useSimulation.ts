@@ -154,6 +154,17 @@ export function useSimulation(
     setHistory([]);
     lastConfRef.current = 0;
     engineRef.current.seekTo(time);
+
+    const seekState = engineRef.current.getState();
+    setState({ ...seekState });
+    setEvents(seekState.firedEvents);
+
+    const newScores = computeAllConfidences(
+      seekState.participants,
+      seekState.calendar,
+      seekState.firedEvents,
+    );
+    setScores(newScores);
   }, []);
 
   const updateParticipant = useCallback((id: string, updates: Partial<Participant>) => {

@@ -237,8 +237,13 @@ export class SimulationEngine {
       // Auto-stop when we've played all events and gone past the last timestamp
       if (this.nextEventIndex >= this.timeline.length) {
         const lastTime = this.timeline[this.timeline.length - 1]?.time ?? 0;
-        if (this.currentTime > lastTime + 2) {
+        if (this.currentTime >= lastTime) {
+          this.currentTime = lastTime;
           this.pause();
+          const finalState = this.getState();
+          for (const cb of this.tickListeners) {
+            cb(finalState);
+          }
         }
       }
     }, this.tickIntervalMs);
