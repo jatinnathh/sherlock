@@ -283,16 +283,6 @@ Optional Groq features require:
 GROQ_KEY=your_groq_api_key
 ```
 
-Optional email notification support uses:
-
-```bash
-SMTP_USER=your_email
-SMTP_PASS=your_app_password
-NOTIFICATION_EMAIL=receiver_email
-```
-
-For a hiring submission, the email notification feature is optional and not required for candidate identification.
-
 ## Commands
 
 ```bash
@@ -301,17 +291,7 @@ npm run build
 npm run dev
 ```
 
-## Demo Video Guide
 
-A good 5-10 minute walkthrough:
-
-1. Explain the problem: fraud detectors need the candidate stream, not interviewer/observer streams.
-2. Show the architecture diagram.
-3. Explain why this is a weak-signal confidence problem.
-4. Run `MacBook Pro` and show that name matching alone fails, but transcript/speaking/screen-share evidence recovers.
-5. Run `Two Johns` or `Observer Talks` to show ambiguity handling.
-6. Point out the active speaker ring, TTS audio, confidence timeline, and signal explanations.
-7. Show the final report.
 8. Discuss limitations and production improvements.
 
 ## Assumptions
@@ -322,16 +302,7 @@ A good 5-10 minute walkthrough:
 - The prototype replays simulated events instead of joining real Google Meet, Teams, or Zoom calls.
 - Downstream fraud models are out of scope; this system identifies which participant those models should analyze.
 
-## Production Design Notes
 
-In production, I would split the system into:
-
-- Meeting ingestion service for Google Meet, Teams, and Zoom bots/SDKs.
-- Streaming feature extraction service for audio, video, transcript, and participant events.
-- Candidate identity service that maintains per-participant belief state.
-- Policy layer that decides when confidence is high enough to route expensive fraud detectors.
-- Audit/explainability store for every decision and signal.
-- Offline evaluation pipeline for labeled historical meetings.
 
 ## What I Would Add Next
 
