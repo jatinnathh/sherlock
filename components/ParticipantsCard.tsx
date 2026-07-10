@@ -54,7 +54,9 @@ export default function ParticipantsCard({
             <span className="card-icon">👥</span>
             Participants
           </h2>
-          <span className="participant-count">{sorted.length}</span>
+          <span className="participant-count" title="Edit participant name or email to test metadata mistakes live">
+            {sorted.length} editable
+          </span>
         </div>
 
         <div className="participants-list">

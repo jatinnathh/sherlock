@@ -196,7 +196,7 @@ export default function Dashboard() {
           scores={scores}
           participants={state?.participants ?? {}}
           activeSpeakerId={activeSpeakerId}
-          onUpdateParticipant={scenarioId === 'custom' ? updateParticipant : undefined}
+          onUpdateParticipant={updateParticipant}
         />
       </div>
 
